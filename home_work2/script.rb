@@ -16,8 +16,29 @@ class Student
     @date_of_birth = date_of_birth
   end
 
+  def self.students=(students)
+    @students = students
+  end
+
+  def self.students
+    @@students
+  end
+
+  def ==(other)
+    @name == other.name && @surname == other.surname && @date_of_birth == other.date_of_birth
+  end
+
   def calculate_age
     age = Date.today.year - date_of_birth.year
+
+    if(Date.today.month < date_of_birth.month)
+      age -= 1
+    elsif(Date.today.month == date_of_birth.month &&
+      Date.today.day < date_of_birth.day)
+      age -= 1
+    end
+
+    age
   end
 
   def add_student()
@@ -36,7 +57,7 @@ class Student
     @@students
   end
 
-  def get_students_by_age(age)
+  def self.get_students_by_age(age)
     students_by_age = []
     @@students.each{ |stud|
       p stud.calculate_age
@@ -47,7 +68,7 @@ class Student
     students_by_age
   end
 
-  def get_students_by_name(name)
+  def self.get_students_by_name(name)
     students_by_name = []
     @@students.each do |stud|
       if stud.name == name
@@ -58,25 +79,3 @@ class Student
   end
 
 end
-
-
-p stud1 = Student.new('Vlad', 'Bukhinskyi', Date.new(2004, 12, 8))
-p stud2 = Student.new('Vasia', 'Pupkin', Date.new(2006, 10, 18))
-p stud3 = Student.new('Vlad', 'Shevchenko', Date.new(2004, 11, 30))
-# p stud4 = Student.new('Gena', 'Gena', Date.new(2024, 12, 8)) #ArgumentError
-p stud5 = Student.new('Vlad', 'Bukhinskyi', Date.new(2004, 12, 8))
-
-
-p stud1.add_student
-p stud2.add_student
-# p stud5.add_student #Dublicate stud1
-
-p stud5.remove_student
-
-stud1.add_student
-stud3.add_student
-
-p stud1.get_students_by_age(20)
-
-p stud1.get_students_by_name("Vasia")
-p stud1.get_students_by_name("Vlad")
