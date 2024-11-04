@@ -15,7 +15,15 @@ Minitest::Reporters.use! [
                          ]
 
 describe Student do
-  let(:student){Student.new('Vlad', 'Bukhinskyi', Date.new(2004, 12, 8))}
+  # let(:student){Student.new('Vlad', 'Bukhinskyi', Date.new(2004, 12, 8))}
+  before do
+    @student = Student.new('Vlad', 'Bukhinskyi', Date.new(2004, 12, 8))
+    @stud2 = Student.new('Vasia', 'Pupkin', Date.new(2006, 10, 18))
+    @stud3 = Student.new('Vlad', 'Shevchenko', Date.new(2004, 11, 3))
+    @stud4 = Student.new('Gena', 'Gena', Date.new(2010, 12, 8))
+
+    Student.students.clear
+  end
 
   describe '#initialize' do
     it 'should set name, surname, and date_of_birth correctly' do
@@ -32,33 +40,27 @@ describe Student do
   end
 
   describe "#calculate age" do
-    it "correctly calculate age" do
-      _(student.calculate_age).must_equal 19
+    it "should correctly calculate age" do
+      _(@student.calculate_age).must_equal 19
     end
   end
 
   describe "add_student" do
-    it "add student" do
-      Student.students.clear
-
-      student.add_student
-      _(Student.students).must_equal [student]
+    it "should add student to \'students\' array" do
+      @student.add_student
+      _(Student.students).must_equal [@student]
     end
 
-    it "doesn't add student" do
-      Student.students.clear
-
-      student.add_student
-      student.add_student
-      _(Student.students).must_equal [student]
+    it "shouldn't add student" do
+      @student.add_student
+      @student.add_student
+      _(Student.students).must_equal [@student]
     end
   end
 
   describe "remove_student" do
-    it "remove student" do
-      Student.students.clear
-
-      student.add_student
+    it "should remove student from \'students\' array" do
+      @student.add_student
 
       student2 = Student.new('Vlad', 'Bukhinskyi', Date.new(2004, 12, 8))
 
@@ -70,34 +72,26 @@ describe Student do
   end
 
   describe "get students by age" do
-    it "get students by age" do
-      @stud1 = Student.new('Vlad', 'Bukhinskyi', Date.new(2004, 12, 8))
-      @stud2 = Student.new('Vasia', 'Pupkin', Date.new(2006, 10, 18))
-      @stud3 = Student.new('Vlad', 'Shevchenko', Date.new(2004, 11, 3))
-      @stud4 = Student.new('Gena', 'Gena', Date.new(2010, 12, 8))
+    it "should get array of students by age" do
 
-      @stud1.add_student
+      @student.add_student
       @stud2.add_student
       @stud3.add_student
       @stud4.add_student
 
-      _(Student.get_students_by_age(19)).must_equal [@stud1]
+      _(Student.get_students_by_age(19)).must_equal [@student]
     end
   end
 
   describe "get students by name" do
-    it "get students by name" do
-      @stud1 = Student.new('Vlad', 'Bukhinskyi', Date.new(2004, 12, 8))
-      @stud2 = Student.new('Vasia', 'Pupkin', Date.new(2006, 10, 18))
-      @stud3 = Student.new('Vlad', 'Shevchenko', Date.new(2004, 11, 3))
-      @stud4 = Student.new('Gena', 'Gena', Date.new(2010, 12, 8))
+    it "should get array of students by name" do
 
-      @stud1.add_student
+      @student.add_student
       @stud2.add_student
       @stud3.add_student
       @stud4.remove_student
 
-      _(Student.get_students_by_name('Vlad')).must_equal [@stud1, @stud3]
+      _(Student.get_students_by_name('Vlad')).must_equal [@student, @stud3]
     end
   end
 
